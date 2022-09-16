@@ -1,7 +1,13 @@
 #!/usr/bin/python3
-"""This module defines a base class for all models in our hbnb clone"""
+"""This is the base model class for AirBnB"""
+from sqlalchemy.ext.declarative import declarative_base
 import uuid
+import models
 from datetime import datetime
+from sqlalchemy import Column, Integer, String, DateTime
+
+
+Base = declarative_base()
 
 
 class BaseModel:
