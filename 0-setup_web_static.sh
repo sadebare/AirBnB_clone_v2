@@ -1,12 +1,19 @@
 #!/usr/bin/env bash
-# sets up the web servers for the deployment of web_static
-sudo apt-get update -y
-sudo apt-get upgrade -y
-sudo apt-get install nginx -y
-sudo mkdir -p /data/web_static/releases/test /data/web_static/shared
+# sets up your web servers for the deployment of web_static
+
+#install nginx web server 
+apt-get update
+apt-get install -y nginx
+
+mkdir -p /data/web_static/releases/
+mkdir -p /data/web_static/shared/
+mkdir -p /data/web_static/releases/test/
 echo "Release test" >> /data/web_static/releases/test/index.html
-sudo ln -sfn /data/web_static/current /data/web_static/releases/test/
-chown -R ubuntu:ubuntu /data/
+# Create symlink, override if already exists
+ln -sfn /data/web_static/releases/test /data/web_static/current
+chown -R ubuntu:ubuntu /data/ 
+
+# Add static location to nginx settings: 
 
 printf %s "server {
         listen 80 default_server;
@@ -21,4 +28,4 @@ printf %s "server {
         }
 }" > /etc/nginx/sites-available/default
 
-sudo service nginx start
+service nginx restart
