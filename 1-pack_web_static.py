@@ -7,6 +7,7 @@ usage:
 from fabric.api import local
 from datetime import datetime
 
+
 def do_pack():
     """Generates .tgz archive from the contents of /web_static
        returns archive's path if successful and None if not
