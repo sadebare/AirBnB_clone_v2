@@ -4,8 +4,21 @@ sudo apt-get update -y
 sudo apt-get upgrade -y
 sudo apt-get install nginx -y
 sudo mkdir -p /data/web_static/releases/test /data/web_static/shared
-echo "This is a test" | sudo tee /data/web_static/releases/test/index.html
-sudo ln -sf /data/web_static/current /data/web_static/releases/test/
-sudo chown -R ubuntu:ubuntu /data/ 
-sudo sed -i '38i\\tlocation /hbnb_static/ {\n\t\talias /data/web_static/current/;\n\t}\n' /etc/nginx/sites-available/default
+echo "Release test" >> /data/web_static/releases/test/index.html
+sudo ln -sfn /data/web_static/current /data/web_static/releases/test/
+chown -R ubuntu:ubuntu /data/
+
+printf %s "server {
+        listen 80 default_server;
+        listen [::]:80 default_server;
+        add_header X-Served-By $HOSTNAME;
+        root /var/www/html;
+        index index.html;
+        
+        location /hbnb_static {
+            alias /data/web_static/current;
+            index index.html index.htm;
+        }
+}" > /etc/nginx/sites-available/default
+
 sudo service nginx start
